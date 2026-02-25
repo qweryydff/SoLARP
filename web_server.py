@@ -62,26 +62,55 @@ def _load_portfolio_data() -> dict:
     wins = sum(1 for t in closed if t.get("pnl_sol", 0) > 0)
     win_rate = (wins / len(closed) * 100) if closed else 0
 
-    # Estimated total balance (free + invested in open positions)
-    invested_sol = sum(p.get("sol_invested", 0) for p in positions.values())
-    total_balance = balance + invested_sol
+    # Real-time value of open positions
+    # current_price_usd is updated by the trading loop on each scan
+    open_positions_value_sol = 0.0
+    for sym, pos in positions.items():
+        entry_price = pos.get("entry_price_usd", 0)
+        current_price = pos.get("current_price_usd", entry_price)  # fallback to entry if not updated yet
+        tokens = pos.get("tokens_bought", 0)
+        sol_price_at_entry = pos.get("sol_price_at_entry", 1) or 1
+        if entry_price > 0 and tokens > 0:
+            current_value_usd = tokens * current_price
+            current_value_sol = current_value_usd / sol_price_at_entry
+            open_positions_value_sol += current_value_sol
+        else:
+            open_positions_value_sol += pos.get("sol_invested", 0)
+
+    # Total balance = free SOL + real-time value of open positions
+    total_balance = balance + open_positions_value_sol
+
+    # Overall PnL vs starting balance
+    overall_pnl_sol = total_balance - STARTING_BALANCE_SOL
+    overall_pnl_pct = (overall_pnl_sol / STARTING_BALANCE_SOL) * 100
 
     # Best trade
     best_trade = max(closed, key=lambda t: t.get("pnl_sol", 0)) if closed else None
     best_mult = best_trade.get("multiplier", 1) if best_trade else 0
 
-    # Open positions details
+    # Open positions details with real-time PnL
     open_positions = []
     for sym, pos in positions.items():
         sol_invested = pos.get("sol_invested", 0)
+        original_sol = pos.get("original_sol_invested", sol_invested) or sol_invested
         timestamp = pos.get("timestamp", 0)
         age_hours = (time.time() - timestamp) / 3600 if timestamp else 0
         entry_price = pos.get("entry_price_usd", 0)
+        current_price = pos.get("current_price_usd", entry_price)
         tokens = pos.get("tokens_bought", 0)
-        sol_at_entry = pos.get("sol_price_at_entry", 1)
-        # estimate current pnl% based on stored highest_mult as proxy
-        highest_mult = pos.get("highest_mult", 1.0)
-        pnl_pct = round((highest_mult - 1) * 100, 1)
+        sol_price_at_entry = pos.get("sol_price_at_entry", 1) or 1
+
+        if entry_price > 0 and tokens > 0 and current_price > 0:
+            current_value_usd = tokens * current_price
+            current_value_sol = current_value_usd / sol_price_at_entry
+            pnl_sol_open = current_value_sol - sol_invested
+            mult = current_price / entry_price
+            pnl_pct = round((mult - 1) * 100, 1)
+        else:
+            pnl_sol_open = 0.0
+            mult = pos.get("highest_mult", 1.0)
+            pnl_pct = round((mult - 1) * 100, 1)
+
         open_positions.append({
             "symbol": sym,
             "entry_mcap": pos.get("entry_mcap", 0),
@@ -89,7 +118,8 @@ def _load_portfolio_data() -> dict:
             "age_hours": round(age_hours, 1),
             "contract": pos.get("contract", ""),
             "pnl_pct": pnl_pct,
-            "highest_mult": round(highest_mult, 2),
+            "pnl_sol": round(pnl_sol_open, 4),
+            "highest_mult": round(mult, 2),
             "partial_sold": pos.get("partial_sold", False),
         })
 
@@ -108,8 +138,8 @@ def _load_portfolio_data() -> dict:
         "balance_sol": round(balance, 4),
         "total_balance_sol": round(total_balance, 4),
         "starting_balance": STARTING_BALANCE_SOL,
-        "overall_pnl_sol": round(total_balance - STARTING_BALANCE_SOL, 4),
-        "overall_pnl_pct": round((total_balance - STARTING_BALANCE_SOL) / STARTING_BALANCE_SOL * 100, 2),
+        "overall_pnl_sol": round(overall_pnl_sol, 4),
+        "overall_pnl_pct": round(overall_pnl_pct, 2),
         "closed_pnl_sol": round(total_closed_pnl, 4),
         "total_trades": len(closed),
         "open_positions_count": len(positions),

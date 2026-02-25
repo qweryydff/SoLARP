@@ -40,6 +40,7 @@ class Position:
         self.original_sol_invested = sol_invested  # for DCA sizing
         self.early_jeet_done  = False   # True after early jeet executed (once per position)
         self.entry_mcap       = 0.0     # market cap at entry (USD)
+        self.current_price_usd = entry_price_usd  # updated on every scan for real-time PnL
 
     def current_multiplier(self, current_price_usd: float) -> float:
         if self.entry_price_usd == 0:
@@ -67,6 +68,7 @@ class Position:
             "original_sol_invested":   self.original_sol_invested,
             "early_jeet_done":         self.early_jeet_done,
             "entry_mcap":              self.entry_mcap,
+            "current_price_usd":       self.current_price_usd,
         }
 
     @classmethod
@@ -87,6 +89,7 @@ class Position:
         p.original_sol_invested  = d.get("original_sol_invested", p.sol_invested)
         p.early_jeet_done        = d.get("early_jeet_done", False)
         p.entry_mcap             = d.get("entry_mcap", 0.0)
+        p.current_price_usd      = d.get("current_price_usd", p.entry_price_usd)
         return p
 
 

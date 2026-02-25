@@ -141,6 +141,10 @@ def scan_and_trade(portfolio: Portfolio, _watchlist_unused: list = None) -> List
             continue
 
         current_price = stats["price_usd"]
+
+        # Update current price for real-time PnL on dashboard
+        pos.current_price_usd = current_price
+
         mult          = pos.current_multiplier(current_price)
         signal, mult  = check_sell_signal(pos, current_price)
 

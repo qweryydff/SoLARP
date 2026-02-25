@@ -70,7 +70,7 @@
             <div class="hero-stats">
                 <div class="hero-stat">
                     <span class="hero-stat-value" id="heroBalance">10.0000</span>
-                    <span class="hero-stat-label">SOL Balance</span>
+                    <span class="hero-stat-label">Total Balance (SOL)</span>
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div class="hero-stat">
@@ -79,13 +79,8 @@
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div class="hero-stat">
-                    <span class="hero-stat-value" id="heroWinRate">0%</span>
-                    <span class="hero-stat-label">Win Rate</span>
-                </div>
-                <div class="hero-stat-divider"></div>
-                <div class="hero-stat">
                     <span class="hero-stat-value" id="heroPnl">+0.0000</span>
-                    <span class="hero-stat-label">PnL (SOL)</span>
+                    <span class="hero-stat-label">Overall PnL (SOL)</span>
                 </div>
             </div>
         </div>
@@ -166,6 +161,7 @@
             <div class="stats-grid">
                 <div class="stat-card stat-card-big">
                     <span class="stat-label">Total Balance</span>
+                    <span style="font-size:.72rem;color:var(--text-muted);margin-bottom:2px;display:block;">free SOL + open positions</span>
                     <span class="stat-value" id="statBalance">—</span>
                     <span class="stat-unit">SOL</span>
                     <div class="stat-bar">
@@ -174,17 +170,14 @@
                 </div>
                 <div class="stat-card">
                     <span class="stat-label">Overall PnL</span>
+                    <span style="font-size:.72rem;color:var(--text-muted);margin-bottom:2px;display:block;">vs 10 SOL start</span>
                     <span class="stat-value" id="statPnl">—</span>
                     <span class="stat-unit">SOL</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-label">PnL %</span>
+                    <span class="stat-label">Overall PnL %</span>
+                    <span style="font-size:.72rem;color:var(--text-muted);margin-bottom:2px;display:block;">vs 10 SOL start</span>
                     <span class="stat-value" id="statPnlPct">—</span>
-                    <span class="stat-unit">%</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-label">Win Rate</span>
-                    <span class="stat-value" id="statWinRate">—</span>
                     <span class="stat-unit">%</span>
                 </div>
                 <div class="stat-card">
@@ -226,7 +219,8 @@
                                 <th>Entry MC</th>
                                 <th>Size (SOL)</th>
                                 <th>Age</th>
-                                <th>PnL</th>
+                                <th>PnL SOL</th>
+                                <th>PnL %</th>
                                 <th>Status</th>
                             </tr>
                         </thead>

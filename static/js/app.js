@@ -309,12 +309,10 @@
         // Hero stats
         const heroBalance = document.getElementById("heroBalance");
         const heroTrades = document.getElementById("heroTrades");
-        const heroWinRate = document.getElementById("heroWinRate");
         const heroPnl = document.getElementById("heroPnl");
 
         if (heroBalance) animateValue(heroBalance, 0, data.total_balance_sol, 1200, 4);
         if (heroTrades) animateValue(heroTrades, 0, data.total_trades, 800, 0);
-        if (heroWinRate) animateValue(heroWinRate, 0, data.win_rate, 1000, 1, "", "%");
         if (heroPnl) {
             const prefix = data.overall_pnl_sol >= 0 ? "+" : "";
             animateValue(heroPnl, 0, data.overall_pnl_sol, 1000, 4, prefix);
@@ -344,7 +342,6 @@
             statPnlPct.textContent = sign + data.overall_pnl_pct.toFixed(2);
             statPnlPct.className = "stat-value " + (data.overall_pnl_pct >= 0 ? "positive" : "negative");
         }
-        if (statWinRate) statWinRate.textContent = data.win_rate.toFixed(1);
         if (statTrades) statTrades.textContent = data.total_trades;
         if (statOpen) statOpen.textContent = data.open_positions_count;
         if (statBest) statBest.textContent = data.best_multiplier > 0 ? data.best_multiplier.toFixed(2) + "x" : "—";
@@ -368,6 +365,7 @@
                     <td>${mcap}</td>
                     <td>${p.sol_invested.toFixed(3)}</td>
                     <td>${formatAge(p.age_hours)}</td>
+                    <td style="color:${pnlColor}; font-weight:600;">${pnlSign}${p.pnl_sol !== undefined ? p.pnl_sol.toFixed(4) : "—"} SOL</td>
                     <td style="color:${pnlColor}; font-weight:600;">${pnlSign}${p.pnl_pct}%</td>
                     <td><span class="badge badge-active">OPEN</span> ${p.partial_sold ? '<span class="badge badge-partial">Partial</span>' : ''}</td>
                 </tr>`;
