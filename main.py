@@ -12,7 +12,9 @@ This starts THREE things in parallel:
 import logging
 import time
 import sys
+import os
 import schedule
+import requests as _requests
 
 from config import WATCHLIST_TOKENS, SCAN_INTERVAL_SECONDS, WEB_SERVER_PORT
 from portfolio import Portfolio
@@ -80,6 +82,18 @@ def run_market_thought():
     send_market_thought(portfolio, telegram, twitter)
 
 
+def keep_alive():
+    """Ping own web server every 14 min so Render free tier doesn't sleep."""
+    render_url = os.getenv("RENDER_EXTERNAL_URL", "")
+    if not render_url:
+        return
+    try:
+        _requests.get(f"{render_url}/api/stats", timeout=10)
+        logger.debug("Keep-alive ping sent.")
+    except Exception:
+        pass
+
+
 # ─── Scheduler ───────────────────────────────────────────────────────────────
 
 def start():
@@ -106,6 +120,9 @@ def start():
 
     # Send first market thought immediately on start
     run_market_thought()
+
+    # Keep-alive ping every 14 min (prevents Render free tier from sleeping)
+    schedule.every(14).minutes.do(keep_alive)
 
     # Daily summary at 20:00
     schedule.every().day.at("20:00").do(run_daily_summary)

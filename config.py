@@ -44,4 +44,5 @@ POSITIONS_FILE   = "positions.json"
 
 # ─── Web Dashboard ────────────────────────────────────────────────────────────
 WEB_SERVER_HOST  = os.getenv("WEB_SERVER_HOST", "0.0.0.0")
-WEB_SERVER_PORT  = int(os.getenv("WEB_SERVER_PORT", "5000"))
+# Render sets PORT automatically — fall back to WEB_SERVER_PORT or 8080
+WEB_SERVER_PORT  = int(os.getenv("PORT") or os.getenv("WEB_SERVER_PORT", "8080"))
