@@ -39,6 +39,7 @@ class Position:
         self.dca_done         = False   # True after DCA buy executed
         self.original_sol_invested = sol_invested  # for DCA sizing
         self.early_jeet_done  = False   # True after early jeet executed (once per position)
+        self.entry_mcap       = 0.0     # market cap at entry (USD)
 
     def current_multiplier(self, current_price_usd: float) -> float:
         if self.entry_price_usd == 0:
@@ -65,6 +66,7 @@ class Position:
             "dca_done":                self.dca_done,
             "original_sol_invested":   self.original_sol_invested,
             "early_jeet_done":         self.early_jeet_done,
+            "entry_mcap":              self.entry_mcap,
         }
 
     @classmethod
@@ -84,6 +86,7 @@ class Position:
         p.dca_done               = d.get("dca_done", False)
         p.original_sol_invested  = d.get("original_sol_invested", p.sol_invested)
         p.early_jeet_done        = d.get("early_jeet_done", False)
+        p.entry_mcap             = d.get("entry_mcap", 0.0)
         return p
 
 

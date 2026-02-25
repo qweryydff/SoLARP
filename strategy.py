@@ -249,6 +249,8 @@ def scan_and_trade(portfolio: Portfolio, _watchlist_unused: list = None) -> List
                     sol_amount      = POSITION_SIZE_SOL,
                 )
                 if pos:
+                    pos.entry_mcap = stats.get("fdv", 0)
+                    portfolio.save()
                     logger.info(f"BUY signal: {symbol} | {reason}")
                     events.append({
                         "type":       "buy",

@@ -358,16 +358,20 @@
         const posBody = document.getElementById("positionsBody");
         if (data.open_positions && data.open_positions.length > 0 && posSection && posBody) {
             posSection.style.display = "block";
-            posBody.innerHTML = data.open_positions.map(p => `
+            posBody.innerHTML = data.open_positions.map(p => {
+                const pnlColor = p.pnl_pct >= 0 ? "#14F195" : "#FF4757";
+                const pnlSign  = p.pnl_pct >= 0 ? "+" : "";
+                const mcap     = formatMcap(p.entry_mcap);
+                return `
                 <tr>
                     <td style="color: var(--text-bright); font-weight: 600;">$${p.symbol}</td>
-                    <td>${formatPrice(p.entry_price_usd)}</td>
+                    <td>${mcap}</td>
                     <td>${p.sol_invested.toFixed(3)}</td>
                     <td>${formatAge(p.age_hours)}</td>
-                    <td>${p.dca_done ? '<span class="badge badge-dca">DCA\'d</span>' : '—'}</td>
+                    <td style="color:${pnlColor}; font-weight:600;">${pnlSign}${p.pnl_pct}%</td>
                     <td><span class="badge badge-active">OPEN</span> ${p.partial_sold ? '<span class="badge badge-partial">Partial</span>' : ''}</td>
-                </tr>
-            `).join("");
+                </tr>`;
+            }).join("");
         } else if (posSection) {
             posSection.style.display = "none";
         }
@@ -404,6 +408,14 @@
     }
 
     // ─── HELPERS ─────────────────────────────────────────────────────────────
+    function formatMcap(val) {
+        if (!val || val <= 0) return "—";
+        if (val >= 1e9) return "$" + (val / 1e9).toFixed(2) + "B";
+        if (val >= 1e6) return "$" + (val / 1e6).toFixed(2) + "M";
+        if (val >= 1e3) return "$" + (val / 1e3).toFixed(1) + "K";
+        return "$" + val.toFixed(0);
+    }
+
     function formatPrice(price) {
         if (price < 0.000001) return "$" + price.toFixed(10);
         if (price < 0.001) return "$" + price.toFixed(8);

@@ -73,17 +73,23 @@ def _load_portfolio_data() -> dict:
     # Open positions details
     open_positions = []
     for sym, pos in positions.items():
-        entry_price = pos.get("entry_price_usd", 0)
         sol_invested = pos.get("sol_invested", 0)
         timestamp = pos.get("timestamp", 0)
         age_hours = (time.time() - timestamp) / 3600 if timestamp else 0
+        entry_price = pos.get("entry_price_usd", 0)
+        tokens = pos.get("tokens_bought", 0)
+        sol_at_entry = pos.get("sol_price_at_entry", 1)
+        # estimate current pnl% based on stored highest_mult as proxy
+        highest_mult = pos.get("highest_mult", 1.0)
+        pnl_pct = round((highest_mult - 1) * 100, 1)
         open_positions.append({
             "symbol": sym,
-            "entry_price_usd": entry_price,
+            "entry_mcap": pos.get("entry_mcap", 0),
             "sol_invested": sol_invested,
             "age_hours": round(age_hours, 1),
             "contract": pos.get("contract", ""),
-            "dca_done": pos.get("dca_done", False),
+            "pnl_pct": pnl_pct,
+            "highest_mult": round(highest_mult, 2),
             "partial_sold": pos.get("partial_sold", False),
         })
 
