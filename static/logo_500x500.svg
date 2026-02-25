@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <defs>
+    <linearGradient id="mainGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9945FF"/>
+      <stop offset="100%" stop-color="#14F195"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#0d0d1a"/>
+      <stop offset="100%" stop-color="#06060e"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#9945FF" stop-opacity="0.15"/>
+      <stop offset="50%" stop-color="#14F195" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#9945FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9945FF" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#14F195" stop-opacity="0.25"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9945FF"/>
+      <stop offset="100%" stop-color="#14F195"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textGlow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="500" rx="60" fill="url(#bgGrad)"/>
+
+  <!-- Ambient glow -->
+  <ellipse cx="250" cy="200" rx="220" ry="180" fill="url(#glowGrad)"/>
+
+  <!-- Outer ring -->
+  <circle cx="250" cy="210" r="155" fill="none" stroke="url(#ringGrad)" stroke-width="1"/>
+
+  <!-- Inner ring -->
+  <circle cx="250" cy="210" r="120" fill="none" stroke="url(#ringGrad)" stroke-width="0.8"/>
+
+  <!-- Orbital dots -->
+  <circle cx="405" cy="210" r="4" fill="#9945FF" opacity="0.6" filter="url(#glow)"/>
+  <circle cx="130" cy="210" r="3.5" fill="#14F195" opacity="0.5" filter="url(#glow)"/>
+  <circle cx="320" cy="80" r="3" fill="#14F195" opacity="0.4" filter="url(#glow)"/>
+  <circle cx="180" cy="330" r="3" fill="#9945FF" opacity="0.4" filter="url(#glow)"/>
+
+  <!-- Main hexagon ape logo -->
+  <g transform="translate(250, 200)" filter="url(#softGlow)">
+    <!-- Hex body -->
+    <path d="M0 -85 L74 -42.5 L74 42.5 L0 85 L-74 42.5 L-74 -42.5 Z"
+          fill="none" stroke="url(#mainGrad)" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Eyes -->
+    <circle cx="-22" cy="-12" r="10" fill="#9945FF"/>
+    <circle cx="22" cy="-12" r="10" fill="#14F195"/>
+
+    <!-- Eye highlights -->
+    <circle cx="-19" cy="-15" r="3.5" fill="#c28aff" opacity="0.6"/>
+    <circle cx="25" cy="-15" r="3.5" fill="#6dffc8" opacity="0.6"/>
+
+    <!-- Smile -->
+    <path d="M-18 25 Q0 42 18 25" fill="none" stroke="url(#mainGrad)" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Nostrils -->
+    <circle cx="-6" cy="10" r="2.5" fill="#9945FF" opacity="0.4"/>
+    <circle cx="6" cy="10" r="2.5" fill="#14F195" opacity="0.4"/>
+
+    <!-- Brow lines -->
+    <path d="M-35 -30 Q-22 -38 -12 -28" fill="none" stroke="#9945FF" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <path d="M35 -30 Q22 -38 12 -28" fill="none" stroke="#14F195" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- $SoLARP text -->
+  <text x="250" y="380" text-anchor="middle"
+        font-family="'Space Grotesk', 'Segoe UI', system-ui, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="2"
+        fill="url(#textGrad)" filter="url(#textGlow)">$SoLARP</text>
+
+  <!-- Tagline -->
+  <text x="250" y="420" text-anchor="middle"
+        font-family="'Space Grotesk', 'Segoe UI', system-ui, sans-serif"
+        font-size="16" font-weight="400" letter-spacing="4"
+        fill="#8888aa" opacity="0.8">THE DEGEN THAT NEVER SLEEPS</text>
+
+  <!-- Small decorative particles -->
+  <circle cx="80" cy="100" r="1.5" fill="#9945FF" opacity="0.3"/>
+  <circle cx="420" cy="130" r="1" fill="#14F195" opacity="0.25"/>
+  <circle cx="100" cy="400" r="1.2" fill="#14F195" opacity="0.2"/>
+  <circle cx="400" cy="380" r="1.5" fill="#9945FF" opacity="0.2"/>
+  <circle cx="60" cy="250" r="1" fill="#14F195" opacity="0.15"/>
+  <circle cx="440" cy="300" r="1" fill="#9945FF" opacity="0.15"/>
+</svg>

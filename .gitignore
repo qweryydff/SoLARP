@@ -1,0 +1,7 @@
+positions.json
+.env
+bot.log
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store

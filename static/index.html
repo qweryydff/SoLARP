@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$SoLARP – Solana Paper Trading AI</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%239945FF'/><stop offset='100%25' stop-color='%2314F195'/></linearGradient></defs><path d='M50 8L90 30v40L50 92 10 70V30z' fill='none' stroke='url(%23g)' stroke-width='5'/><circle cx='38' cy='42' r='5' fill='%239945FF'/><circle cx='62' cy='42' r='5' fill='%2314F195'/><path d='M38 62q12 10 24 0' fill='none' stroke='%2314F195' stroke-width='3' stroke-linecap='round'/></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ═══ PARTICLES CANVAS ═══ -->
+    <canvas id="particles"></canvas>
+
+    <!-- ═══ GLOW ORB BACKGROUND ═══ -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ═══ NAV ═══ -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="#" class="logo">
+                <span class="logo-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M9 15q3 2.5 6 0"/></svg></span>
+                <span class="logo-text">$SoLARP</span>
+            </a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#stats">Live Stats</a>
+                <a href="#trades">Trades</a>
+                <a href="#how">How It Works</a>
+                <a href="https://t.me/" target="_blank" class="btn-nav">Join Telegram</a>
+            </div>
+            <button class="mobile-toggle" id="mobileToggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                LIVE ON SOLANA
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient-text">$SoLARP</span>
+                <br>
+                <span class="hero-sub">The Degen That Never Sleeps</span>
+            </h1>
+            <p class="hero-desc">
+                AI-powered paper trading bot that scans Solana memecoins 24/7, 
+                makes trades, and posts every play in real-time. 
+                Zero real money. Pure alpha simulation.
+            </p>
+            <div class="hero-actions">
+                <a href="#stats" class="btn btn-primary">
+                    <span class="btn-glow"></span>
+                    View Live Dashboard
+                </a>
+                <a href="https://t.me/" target="_blank" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M9 15q3 2.5 6 0"/></svg> Join the LARP
+                </a>
+            </div>
+
+            <!-- Mini stats row -->
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="heroBalance">10.0000</span>
+                    <span class="hero-stat-label">SOL Balance</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="heroTrades">0</span>
+                    <span class="hero-stat-label">Trades Closed</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="heroWinRate">0%</span>
+                    <span class="hero-stat-label">Win Rate</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="hero-stat-value" id="heroPnl">+0.0000</span>
+                    <span class="hero-stat-label">PnL (SOL)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Animated SOL logo -->
+        <div class="hero-visual">
+            <div class="sol-ring sol-ring-1"></div>
+            <div class="sol-ring sol-ring-2"></div>
+            <div class="sol-ring sol-ring-3"></div>
+            <div class="sol-center">
+                <span><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="url(#heroGrad)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="heroGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#9945FF"/><stop offset="100%" stop-color="#14F195"/></linearGradient></defs><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="#9945FF" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="#14F195" stroke="none"/><path d="M9 15q3 2.5 6 0" stroke="#14F195"/></svg></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TICKER BAR ═══ -->
+    <div class="ticker-bar">
+        <div class="ticker-track" id="tickerTrack">
+            <!-- JS populates -->
+        </div>
+    </div>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">WTF is SoLARP?</span>
+            </h2>
+            <p class="section-subtitle">
+                An autonomous AI agent that paper-trades Solana memecoins and broadcasts every move. 
+                Think of it as a CT degen persona — but it's an algorithm.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card" data-delay="0">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></div>
+                    <h3>Live Scanner</h3>
+                    <p>Scans DexScreener every 60s for trending Solana memecoins. Filters by volume, liquidity, and momentum.</p>
+                </div>
+                <div class="feature-card" data-delay="100">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+                    <h3>Smart Entry</h3>
+                    <p>Buys only when 1h momentum is +3-200%, volume &gt;$150K, liquidity &gt;$80K, mcap $200K-$50M.</p>
+                </div>
+                <div class="feature-card" data-delay="200">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg></div>
+                    <h3>DCA Logic</h3>
+                    <p>Averages down when a position drops -20%. One DCA per position, half the original size.</p>
+                </div>
+                <div class="feature-card" data-delay="300">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="4" r="2"/><path d="M6 21l3-6 4 1 3-8"/><path d="M12 12l3-2 3 4"/><path d="M6 12l3-2"/></svg></div>
+                    <h3>Early Jeet</h3>
+                    <p>When portfolio is red, sells small winners (+10-35%) to recover. Survival mode activated.</p>
+                </div>
+                <div class="feature-card" data-delay="400">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/><path d="M12 8v8M9 12h6"/></svg></div>
+                    <h3>Take Profits</h3>
+                    <p>Partial sells at 2x, 3x, 5x. Full exit at 10x. Let the runners run.</p>
+                </div>
+                <div class="feature-card" data-delay="500">
+                    <div class="feature-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+                    <h3>Risk Management</h3>
+                    <p>Stop loss at -30%. Stale close after 48h if position hasn't moved. Discipline &gt; hope.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ LIVE STATS ═══ -->
+    <section class="section section-dark" id="stats">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="pulse-dot"></span>
+                <span class="gradient-text">Live Dashboard</span>
+            </h2>
+            <p class="section-subtitle">Real-time portfolio stats. Updated every scan cycle.</p>
+
+            <div class="stats-grid">
+                <div class="stat-card stat-card-big">
+                    <span class="stat-label">Total Balance</span>
+                    <span class="stat-value" id="statBalance">—</span>
+                    <span class="stat-unit">SOL</span>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill" id="balanceBar"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Overall PnL</span>
+                    <span class="stat-value" id="statPnl">—</span>
+                    <span class="stat-unit">SOL</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">PnL %</span>
+                    <span class="stat-value" id="statPnlPct">—</span>
+                    <span class="stat-unit">%</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Win Rate</span>
+                    <span class="stat-value" id="statWinRate">—</span>
+                    <span class="stat-unit">%</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Trades Closed</span>
+                    <span class="stat-value" id="statTrades">—</span>
+                    <span class="stat-unit">total</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Open Positions</span>
+                    <span class="stat-value" id="statOpen">—</span>
+                    <span class="stat-unit">active</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Best Trade</span>
+                    <span class="stat-value" id="statBest">—</span>
+                    <span class="stat-unit">multiplier</span>
+                </div>
+            </div>
+
+            <!-- Open Positions Table -->
+            <div class="table-section" id="positionsSection" style="display:none;">
+                <h3 class="table-title"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195;margin-right:8px;vertical-align:middle;"></span>Open Positions</h3>
+                <div class="table-wrap">
+                    <table class="data-table" id="positionsTable">
+                        <thead>
+                            <tr>
+                                <th>Token</th>
+                                <th>Entry Price</th>
+                                <th>Size (SOL)</th>
+                                <th>Age</th>
+                                <th>DCA</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="positionsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ RECENT TRADES ═══ -->
+    <section class="section" id="trades">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">Recent Trades</span>
+            </h2>
+            <p class="section-subtitle">Every buy, sell, jeet and stop-loss — transparent and on-chain verifiable.</p>
+
+            <div class="trades-feed" id="tradesFeed">
+                <div class="trades-empty">
+                    <span><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M9 15q3 2.5 6 0"/></svg></span>
+                    <p>No trades yet. The bot is scanning...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section class="section section-dark" id="how">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="gradient-text">How It Works</span>
+            </h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">01</div>
+                    <div class="step-content">
+                        <h3>Scan</h3>
+                        <p>Every 60 seconds, the bot queries DexScreener for trending Solana memecoins. It evaluates boosted tokens, search results, and token profiles.</p>
+                    </div>
+                    <div class="step-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8v6M8 11h6"/></svg></div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-num">02</div>
+                    <div class="step-content">
+                        <h3>Evaluate</h3>
+                        <p>Each token is scored on 1h/6h momentum, 24h volume, liquidity depth, and market cap range. Only the best setups pass the filter.</p>
+                    </div>
+                    <div class="step-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 5 12 7 7 0 0 1-10 0A7 7 0 0 1 12 2z"/><path d="M12 14c-3 0-5.5 2-6 5h12c-.5-3-3-5-6-5z"/><path d="M9.5 8c.3-.8 1.2-1 2-.5M14.5 8c-.3-.8-1.2-1-2-.5"/><path d="M8 10h3M13 10h3"/></svg></div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-num">03</div>
+                    <div class="step-content">
+                        <h3>Trade</h3>
+                        <p>Paper buys with fake SOL. Manages positions with DCA, partial take-profits, stop-losses, and jeet logic. Full risk management.</p>
+                    </div>
+                    <div class="step-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3l4 4-4 4"/><path d="M3 11h18"/><path d="M7 21l-4-4 4-4"/><path d="M21 13H3"/></svg></div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step">
+                    <div class="step-num">04</div>
+                    <div class="step-content">
+                        <h3>Broadcast</h3>
+                        <p>Every trade is posted to Telegram (and optionally Twitter) in authentic CT degen style. Follow the bot to see every play in real-time.</p>
+                    </div>
+                    <div class="step-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12m-2 0a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49"/><path d="M7.76 16.24a6 6 0 0 1 0-8.49"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 19.07a10 10 0 0 1 0-14.14"/></svg></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA ═══ -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-glow"></div>
+                <h2>Ready to Watch the LARP?</h2>
+                <p>Join the Telegram channel and get every trade signal in real-time. No money needed — just vibes.</p>
+                <div class="cta-actions">
+                    <a href="https://t.me/" target="_blank" class="btn btn-primary btn-lg">
+                        <span class="btn-glow"></span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M9 15q3 2.5 6 0"/></svg> Join Telegram
+                    </a>
+                </div>
+                <div class="cta-disclaimer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> This is a PAPER TRADING bot. No real money is involved. Not financial advice. Pure entertainment and education.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="logo-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L22 7.5v9L12 22 2 16.5v-9z"/><circle cx="9" cy="10" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M9 15q3 2.5 6 0"/></svg></span>
+                    <span class="logo-text">$SoLARP</span>
+                    <p>The degen that never sleeps.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#about">About</a>
+                    <a href="#stats">Dashboard</a>
+                    <a href="#trades">Trades</a>
+                    <a href="#how">How It Works</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://t.me/" target="_blank" title="Telegram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                    <a href="https://x.com/" target="_blank" title="Twitter / X">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>$SoLARP © 2026 — Paper Trading Bot on Solana — Not financial advice</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
