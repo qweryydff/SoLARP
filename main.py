@@ -42,10 +42,14 @@ portfolio = Portfolio()
 twitter   = TwitterPoster()
 telegram  = TelegramPoster()
 
+_last_activity_time = time.time()  # tracks last buy/sell/thought posted
+SILENCE_THRESHOLD_SECONDS = 10 * 60  # 10 minutes
+
 
 # ─── Core loop ───────────────────────────────────────────────────────────────
 
 def run_scan():
+    global _last_activity_time
     logger.info("═" * 60)
     logger.info("Running scan …")
 
@@ -68,11 +72,20 @@ def run_scan():
         kind = event.get("type", "trade")
         append_to_feed(post, kind=kind)
 
+        # Update last activity time
+        _last_activity_time = time.time()
+
         # Small delay between posts so we don't spam
         time.sleep(2)
 
     if not events:
         logger.info("No trades this scan.")
+        # Check if bot has been silent for too long
+        silence = time.time() - _last_activity_time
+        if silence >= SILENCE_THRESHOLD_SECONDS:
+            logger.info(f"Silent for {silence/60:.1f} min — sending market thought.")
+            run_market_thought()
+            _last_activity_time = time.time()
 
 
 def run_daily_summary():
@@ -84,7 +97,9 @@ def run_daily_summary():
 
 
 def run_market_thought():
+    global _last_activity_time
     send_market_thought(portfolio, telegram, twitter)
+    _last_activity_time = time.time()
 
 
 def keep_alive():
