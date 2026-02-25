@@ -16,6 +16,24 @@ from config import STARTING_BALANCE_SOL, POSITIONS_FILE, WEB_SERVER_HOST, WEB_SE
 
 logger = logging.getLogger(__name__)
 
+FEED_FILE = os.path.join(os.path.dirname(POSITIONS_FILE), "feed.json")
+_feed_lock = threading.Lock()
+
+
+def append_to_feed(text: str, kind: str = "trade"):
+    """Append a message to feed.json (max 50 entries)."""
+    entry = {"text": text, "kind": kind, "timestamp": int(time.time())}
+    with _feed_lock:
+        try:
+            with open(FEED_FILE, "r") as f:
+                feed = json.load(f)
+        except Exception:
+            feed = []
+        feed.insert(0, entry)
+        feed = feed[:50]  # keep last 50
+        with open(FEED_FILE, "w") as f:
+            json.dump(feed, f)
+
 app = Flask(__name__, static_folder="static", static_url_path="")
 
 
@@ -106,6 +124,17 @@ def index():
 @app.route("/api/stats")
 def api_stats():
     return jsonify(_load_portfolio_data())
+
+
+@app.route("/api/feed")
+def api_feed():
+    try:
+        with _feed_lock:
+            with open(FEED_FILE, "r") as f:
+                feed = json.load(f)
+    except Exception:
+        feed = []
+    return jsonify(feed)
 
 
 @app.route("/api/health")

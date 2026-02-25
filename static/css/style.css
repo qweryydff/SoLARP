@@ -870,6 +870,17 @@ a:hover {
     animation: fadeInUp 0.4s ease both;
 }
 
+.feed-card {
+    align-items: flex-start !important;
+}
+
+.feed-card .trade-card-info p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
 .trade-card:hover {
     border-color: var(--border-glow);
     transform: translateX(4px);

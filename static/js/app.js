@@ -241,6 +241,53 @@
         }
     }
 
+    async function fetchFeed() {
+        try {
+            const res = await fetch("/api/feed");
+            if (!res.ok) return;
+            const feed = await res.json();
+            renderFeed(feed);
+        } catch (e) {
+            console.warn("Could not fetch feed:", e);
+        }
+    }
+
+    function renderFeed(feed) {
+        const container = document.getElementById("tradesFeed");
+        if (!container) return;
+        if (!feed || feed.length === 0) return;
+
+        const kindIcon = { buy: "🟢", sell: "🔴", partial_sell: "💰", stop_loss: "🛑", dca: "📉", thought: "🧠", summary: "📊", trade: "📊" };
+        const kindLabel = { buy: "BUY", sell: "SELL", partial_sell: "PARTIAL", stop_loss: "STOP", dca: "DCA", thought: "THOUGHT", summary: "SUMMARY", trade: "TRADE" };
+        const kindColor = { buy: "#14F195", sell: "#FF4757", partial_sell: "#FFD700", stop_loss: "#FF4757", dca: "#9945FF", thought: "#64b5f6", summary: "#9945FF", trade: "#14F195" };
+
+        container.innerHTML = feed.map((entry, i) => {
+            const icon = kindIcon[entry.kind] || "📊";
+            const label = kindLabel[entry.kind] || "MSG";
+            const color = kindColor[entry.kind] || "#14F195";
+            const ago = formatTimeAgo(entry.timestamp);
+            // format text: newlines → <br>, preserve as monospace-ish
+            const formatted = entry.text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/\n/g, "<br>");
+
+            return `
+                <div class="trade-card feed-card" style="animation-delay:${i * 40}ms; align-items:flex-start;">
+                    <div class="trade-card-icon" style="font-size:1.4rem; min-width:44px; text-align:center;">${icon}</div>
+                    <div class="trade-card-info" style="flex:1; min-width:0;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                            <span style="font-size:.65rem; font-weight:700; letter-spacing:.08em; color:${color}; background:${color}18; border:1px solid ${color}40; border-radius:4px; padding:2px 7px;">${label}</span>
+                            <span style="font-size:.72rem; color:var(--text-muted);">${ago}</span>
+                        </div>
+                        <p style="font-size:.82rem; line-height:1.6; color:var(--text-secondary); margin:0; word-break:break-word;">${formatted}</p>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
     function getDemoData() {
         return {
             balance_sol: 10.0,
@@ -424,7 +471,9 @@
 
     // ─── INIT ────────────────────────────────────────────────────────────────
     fetchStats();
+    fetchFeed();
     setInterval(fetchStats, REFRESH_INTERVAL);
+    setInterval(fetchFeed, REFRESH_INTERVAL);
 
     // Easter egg: Konami code → rain of apes
     let konamiSeq = [];

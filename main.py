@@ -23,7 +23,7 @@ from message_generator import build_post, build_daily_summary
 from twitter_poster import TwitterPoster
 from telegram_poster import TelegramPoster
 from bot_listener import start_listener_thread
-from web_server import start_server_thread
+from web_server import start_server_thread, append_to_feed
 from market_thoughts import send_market_thought
 
 # ─── Logging setup ───────────────────────────────────────────────────────────
@@ -64,6 +64,10 @@ def run_scan():
         # Post to Telegram
         telegram.post(post)
 
+        # Save to web feed
+        kind = event.get("type", "trade")
+        append_to_feed(post, kind=kind)
+
         # Small delay between posts so we don't spam
         time.sleep(2)
 
@@ -76,6 +80,7 @@ def run_daily_summary():
     logger.info(f"\n{'═'*50}\nDAILY SUMMARY\n{summary}\n{'═'*50}")
     twitter.post(summary)
     telegram.post(summary)
+    append_to_feed(summary, kind="summary")
 
 
 def run_market_thought():

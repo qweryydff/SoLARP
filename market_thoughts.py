@@ -138,10 +138,12 @@ def build_market_thought(portfolio=None) -> str:
 def send_market_thought(portfolio, telegram_poster, twitter_poster=None):
     """Generuje i wysyła przemyślenie rynkowe."""
     try:
+        from web_server import append_to_feed
         thought = build_market_thought(portfolio)
         logger.info(f"\n{'─'*50}\nMARKET THOUGHT\n{thought}\n{'─'*50}")
 
         telegram_poster.post(thought)
+        append_to_feed(thought, kind="thought")
 
         if twitter_poster:
             twitter_poster.post(thought)
