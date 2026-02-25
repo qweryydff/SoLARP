@@ -409,9 +409,66 @@ a:hover {
 .hero-actions {
     display: flex;
     gap: 16px;
-    margin-bottom: 48px;
+    margin-bottom: 20px;
     animation: fadeInUp 0.6s ease 0.3s both;
     flex-wrap: wrap;
+}
+
+/* CA Box */
+.ca-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    animation: fadeInUp 0.6s ease 0.4s both;
+    max-width: 100%;
+}
+
+.ca-box:hover {
+    border-color: var(--primary);
+    background: rgba(153, 69, 255, 0.08);
+}
+
+.ca-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    background: rgba(153, 69, 255, 0.15);
+    border: 1px solid rgba(153, 69, 255, 0.3);
+    border-radius: 4px;
+    padding: 2px 7px;
+    white-space: nowrap;
+}
+
+.ca-address {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 320px;
+}
+
+.ca-copy {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.ca-box:hover .ca-copy {
+    color: var(--primary);
 }
 
 /* Hero stats */

@@ -466,6 +466,20 @@
         }
     }
 
+    // ─── COPY CA ─────────────────────────────────────────────────────────────
+    window.copyCa = function() {
+        const ca = "GPZrq8n6ZWXNS1bdZuXv3Z46ebR7J9Ktp1iRXvVBpump";
+        navigator.clipboard.writeText(ca).then(() => {
+            const el = document.getElementById("caCopy");
+            if (el) {
+                el.innerHTML = "✅ Copied!";
+                setTimeout(() => {
+                    el.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+                }, 2000);
+            }
+        });
+    };
+
     // ─── SMOOTH ANCHOR SCROLL ────────────────────────────────────────────────
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener("click", function (e) {
